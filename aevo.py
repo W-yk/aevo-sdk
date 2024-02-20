@@ -181,6 +181,11 @@ class AevoClient:
         data = req.json()
         return data
 
+    def get_orderbook(self, instrument_name):
+        req = self.client.get(f"{self.rest_url}/orderbook?instrument_name={instrument_name}")
+        data = req.json()
+        return data
+
     # Private REST API
     def rest_create_order(
         self, instrument_id, is_buy, limit_price, quantity, post_only=True
@@ -229,6 +234,10 @@ class AevoClient:
 
     def rest_get_portfolio(self):
         req = self.client.get(f"{self.rest_url}/portfolio", headers=self.rest_headers)
+        return req.json()
+    
+    def rest_get_data(self,data):
+        req = self.client.get(f"{self.rest_url}/{data}", headers=self.rest_headers)
         return req.json()
 
     def rest_get_open_orders(self):
