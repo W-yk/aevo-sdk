@@ -36,6 +36,7 @@ def get_data(symbol, bar):
 aevo = AevoClient(**CLIENT_CONFIG)
 
 
+
 c = 0
 def run_bot():
     
@@ -51,17 +52,16 @@ def run_bot():
         amount = float(pos['amount'])
 
         if side == 'buy':
-            aevo.rest_create_order(5197,False,float(aevo.get_orderbook('SOL-PERP')['asks'][0][0]),amount)
+            aevo.rest_create_market_order(5197,False,amount)
         else:
-            aevo.rest_create_order(5197,True,float(aevo.get_orderbook('SOL-PERP')['bids'][0][0]),amount)
-       
-        time.sleep(10)
+            aevo.rest_create_market_order(5197,True,amount)
+        time.sleep(1)
         aevo.rest_cancel_all_orders()
 
     
     print(f"[OREDER] epoch {c} time {datetime.now().isoformat()}")
-    aevo.rest_create_order(5197,True,float(aevo.get_orderbook('SOL-PERP')['bids'][0][0]),10) 
-    aevo.rest_create_order(5197,False,float(aevo.get_orderbook('SOL-PERP')['asks'][5][0]),10) 
+    aevo.rest_create_market_order(5197,True,3)
+    aevo.rest_create_order(5197,False,float(aevo.get_orderbook('SOL-PERP')['asks'][5][0]),3) 
     open_time = datetime.now()
 
     print(f"opentime {open_time.isoformat()} checking all position filled")
@@ -71,7 +71,9 @@ def run_bot():
         if (datetime.now() - open_time).seconds > 60*10:
             print(f"[TIMEOUT] timeout {datetime.now().isoformat()}")
             break
-        time.sleep(30)
+        time.sleep(10)
+
+
 
 
 while True:
